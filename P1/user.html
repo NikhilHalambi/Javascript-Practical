@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+    <h2>Register</h2>
+    <form id="registrationForm">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" required><br><br>
+        
+        <label for="age">Age:</label><br>
+        <input type="number" id="age" required min="13" max="120"><br><br>
+        
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" required><br><br>_
+        
+        <button type="submit">Submit</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+        const form = document.getElementById('registrationForm');
+        const messageDisplay = document.getElementById('message');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = {
+                name: e.target.name.value,
+                age: parseInt(e.target.age.value),
+                email: e.target.email.value
+            };
+            const { name, age, email } = user;
+            
+            if (!name || name.trim() === '') {
+                messageDisplay.textContent = 'Error: Name cannot be empty.';
+            } else if (age < 13 || age > 120) {
+                messageDisplay.textContent = 'Error: Age must be between 13 and 120.';
+            } else if (!email.includes('@') || !email.includes('.')) {
+                messageDisplay.textContent = 'Error: Please enter a valid email.';
+            } else {
+                
+                messageDisplay.textContent = `Welcome, ${name} (Age: ${age}). Your email ${email} has been registered successfully!`;
+            }
+        });
+    </script>
+
+</body>
+</html>
