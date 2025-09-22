@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Fair Grader</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f0f0; padding: 20px; text-align: center; }
+        .container { max-width: 500px; margin: auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+        input, select, button { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+        button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        .results { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 15px; }
+        .card { border: 1px solid #ccc; padding: 10px; border-radius: 5px; width: 150px; }
+        .top-scorer { background-color: #d4edda; border-color: #4CAF50; }
+        .range-value { display: block; text-align: center; font-size: 0.9em; color: #666; }
+        .message { color: red; font-size: 0.9em; margin-top: 5px; display: none; }
+        footer { margin-top: 20px; font-size: 0.8em; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Fair Grader</h2>
+        <form id="gradingForm">
+            <input type="text" id="name" placeholder="Student Name" required>
+            <input type="number" id="roll" placeholder="Roll Number" required>
+
+            <label for="m1">Marks 1 (Maths):</label>
+            <input type="range" id="m1" min="0" max="100" value="75">
+            <span id="m1Value" class="range-value">75</span>
+
+            <label for="m2">Marks 2 (Science):</label>
+            <input type="number" id="m2" min="0" max="100" required>
+
+            <label for="m3">Marks 3 (English):</label>
+            <select id="m3"></select>
+            
+            <div id="message" class="message">Marks must be between 0 and 100.</div>
+            <button type="submit">Add Student</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <h3>Results</h3>
+        <div id="resultsDiv" class="results"></div>
+    </div>
+    
+    <footer>
+        <p>Created by [Your Full Name] - Completion Time: <span id="time"></span></p>
+    </footer>
+
+    <script>
+        const students = [];
+        const form = document.getElementById('gradingForm');
+        const resultsDiv = document.getElementById('resultsDiv');
+        const messageDiv = document.getElementById('message');
+        const m1Range = document.getElementById('m1');
+        const m1Value = document.getElementById('m1Value');
+        const m3Select = document.getElementById('m3');
+        const timeSpan = document.getElementById('time');
+
+        
+        const marksForDropdown = [70, 75, 80, 85, 90, 95];
+        marksForDropdown.forEach(m => { m3Select.innerHTML += `<option value="${m}">${m}</option>`; });
+        m1Range.oninput = () => m1Value.textContent = m1Range.value;
+        timeSpan.textContent = new Date().toLocaleString();
+
+        form.onsubmit = e => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const roll = document.getElementById('roll').value;
+            const m1 = parseInt(m1Range.value);
+            const m2 = parseInt(document.getElementById('m2').value);
+            const m3 = parseInt(m3Select.value);
+
+            if (m2 < 0 || m2 > 100) {
+                messageDiv.style.display = 'block';
+                return;
+            }
+            messageDiv.style.display = 'none';
+
+            const avg = ((m1 + m2 + m3) / 3).toFixed(2);
+            let grade, remark;
+
+            if (avg >= 80) grade = 'A';
+            else if (avg >= 60) grade = 'B';
+            else if (avg >= 40) grade = 'C';
+            else grade = 'F';
+
+            switch (grade) {
+                case 'A': remark = 'Excellent'; break;
+                case 'B': remark = 'Good'; break;
+                case 'C': remark = 'Needs Improvement'; break;
+                default: remark = 'Fail';
+            }
+
+            students.push({name, roll, avg, grade, remark, marks: {m1, m2, m3}});
+            
+            let topAvg = -1, topIndex = -1;
+            for (let i = 0; i < students.length; i++) {
+                if (parseFloat(students[i].avg) > topAvg) {
+                    topAvg = parseFloat(students[i].avg);
+                    topIndex = i;
+                }
+            }
+
+            resultsDiv.innerHTML = '';
+            students.forEach((s, i) => {
+                const card = document.createElement('div');
+                card.className = `card ${i === topIndex ? 'top-scorer' : ''}`;
+                card.innerHTML = `<h3>${s.name}</h3>
+                                  <p>Roll No: ${s.roll}</p>
+                                  <p>Marks: Maths=${s.marks.m1}, Science=${s.marks.m2}, English=${s.marks.m3}</p>
+                                  <p>Avg: ${s.avg}</p>
+                                  <p>Grade: ${s.grade}</p>
+                                  <p>Remark: ${s.remark}</p>`;
+                resultsDiv.appendChild(card);
+            });
+            form.reset();
+        };
+    </script>
+</body>
+</html>
