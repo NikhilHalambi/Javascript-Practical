@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Extract Dates</title>
+</head>
+<body>
+
+  <h3>Extract Dates from Text</h3>
+  <input type="text" id="dateInput" size="50" placeholder="Enter text with dates">
+  <button onclick="extractDates()">Extract</button>
+  <p id="dateOutput"></p>
+
+  <script>
+    function extractDates() {
+      let text = document.getElementById("dateInput").value;
+      let dateRegex = /\d{2}\/\d{2}\/\d{4}/g;
+      let dates = text.match(dateRegex);
+      document.getElementById("dateOutput").innerText = dates;
+    }
+  </script>
+
+</body>
+</html>

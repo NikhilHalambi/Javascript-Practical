@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Extract Hashtags</title>
+</head>
+<body>
+
+  <h3>Extract Hashtags from a Tweet</h3>
+  <input type="text" id="tweetInput" size="50" placeholder="Enter tweet">
+  <button onclick="extractHashtags()">Extract</button>
+  <p id="tweetOutput"></p>
+
+  <script>
+    function extractHashtags() {
+      let tweet = document.getElementById("tweetInput").value;
+      let hashtags = tweet.match(/#[A-Za-z0-9_]+/g);
+      document.getElementById("tweetOutput").innerText = hashtags;
+    }
+  </script>
+
+</body>
+</html>

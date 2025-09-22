@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task 4: Replace Spaces</title>
+</head>
+<body>
+
+  <h3>Replace Multiple Spaces with Single Space</h3>
+  <input type="text" id="spaceInput" placeholder="Enter text">
+  <button onclick="fixSpaces()">Fix</button>
+  <p id="spaceOutput"></p>
+
+  <script>
+    function fixSpaces() {
+      let text = document.getElementById("spaceInput").value;
+      let fixed = text.replace(/\s+/g, " ");
+      document.getElementById("spaceOutput").innerText = fixed;
+    }
+  </script>
+
+</body>
+</html>

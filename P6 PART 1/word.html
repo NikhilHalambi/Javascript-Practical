@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task 5: Word Count</title>
+</head>
+<body>
+
+  <h3>Word Count</h3>
+  <input type="text" id="wordInput" placeholder="Enter sentence">
+  <button onclick="countWords()">Count</button>
+  <p id="wordOutput"></p>
+
+  <script>
+    function countWords() {
+      let sentence = document.getElementById("wordInput").value.trim();
+      if (sentence === "") {
+        document.getElementById("wordOutput").innerText = 0;
+        return;
+      }
+      let words = sentence.split(" ");
+      document.getElementById("wordOutput").innerText = words.length;
+    }
+  </script>
+
+</body>
+</html>

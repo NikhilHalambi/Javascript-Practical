@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Find Duplicate Words</title>
+</head>
+<body>
+
+  <h3>Find Duplicate Words</h3>
+  <input type="text" id="dupInput" size="50" placeholder="Enter text">
+  <button onclick="findDuplicates()">Find</button>
+  <p id="dupOutput"></p>
+
+  <script>
+    function findDuplicates() {
+      let text = document.getElementById("dupInput").value;
+      let dupRegex = /\b(\w+)\s+\1\b/g;
+      let matches = [];
+      let match;
+      while ((match = dupRegex.exec(text)) !== null) {
+        matches.push(match[1]);
+      }
+      document.getElementById("dupOutput").innerText = matches;
+    }
+  </script>
+
+</body>
+</html>

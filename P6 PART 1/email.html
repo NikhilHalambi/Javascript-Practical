@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task 3: Validate Email</title>
+</head>
+<body>
+
+  <h3>Validate Email Address</h3>
+  <input type="text" id="emailInput" placeholder="Enter email">
+  <button onclick="validateEmail()">Validate</button>
+  <p id="emailOutput"></p>
+
+  <script>
+    function validateEmail() {
+      let email = document.getElementById("emailInput").value;
+      let pattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+      let isValid = pattern.test(email);
+      document.getElementById("emailOutput").innerText = isValid;
+    }
+  </script>
+
+</body>
+</html>
