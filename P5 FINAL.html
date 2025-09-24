@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Cart Total Calculator</title>
+</head>
+<body>
+
+<h2>Shopping Cart Calculator</h2>
+<div id="receipt"></div>
+
+<script>
+let cart = [
+  { id: 1, name: "Pen", price: 20, qty: 2, category: "stationery" },
+  { id: 2, name: "Mug", price: 150, qty: 1, category: "kitchen" },
+  { id: 3, name: "Notebook", price: 80, qty: 3, category: "stationery" }
+];
+
+function money(v) {
+  return Number(v.toFixed(2));
+}
+
+let itemTotals = cart.map(item => item.price * item.qty);
+
+let discountedItems = cart.map(item => {
+  let subtotal = item.price * item.qty;
+  let discount = 0;
+  if(item.qty >= 3) {
+    discount = subtotal * 0.05;
+  }
+  return { id: item.id, name: item.name, qty: item.qty, category: item.category, subtotal, discount, after: subtotal - discount };
+});
+
+let stationeryItems = cart.filter(item => item.category === "stationery");
+let stationeryTotal = stationeryItems.reduce((sum, item) => {
+  let d = discountedItems.find(x => x.id === item.id);
+  return sum + d.after;
+}, 0);
+
+let stationeryDiscount = 0;
+if(stationeryTotal > 200) {
+  stationeryDiscount = stationeryTotal * 0.10;
+}
+
+let subtotal = cart.reduce((s, it) => s + (it.price * it.qty), 0);
+let totalItemDiscounts = discountedItems.reduce((s, it) => s + it.discount, 0);
+let finalTotal = subtotal - totalItemDiscounts - stationeryDiscount;
+
+let out = "";
+cart.forEach(it => {
+  let d = discountedItems.find(x => x.id === it.id);
+  let line = "Item: " + it.name + " (x" + it.qty + ") = " + money(it.price * it.qty);
+  if(d.discount > 0) line += " → discount applied";
+  out += "<div>" + line + "</div>";
+});
+out += "<hr>";
+out += "<div>Subtotal: " + money(subtotal) + "</div>";
+out += "<div>Item Discounts: " + money(totalItemDiscounts) + "</div>";
+out += "<div>Stationery Discount: " + money(stationeryDiscount) + "</div>";
+out += "<div>Final Total: " + money(finalTotal) + "</div>";
+
+document.getElementById("receipt").innerHTML = out;
+</script>
+
+</body>
+</html>
